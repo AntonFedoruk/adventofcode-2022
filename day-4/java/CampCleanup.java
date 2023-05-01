@@ -1,9 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class CampCleanup {
     public static void main(String[] args) {
@@ -68,22 +65,10 @@ class Range {
     }
 
     boolean contain(Range other) {
-        if (is1Range) {
-            if (other.start <= start && start <= other.end) {
-                return true;
-            }
-        }
-
-        if (start <= other.start) {
-            if (other.end <= end) {
-                return true;
-            }
-        }
-        return false;
+        return start <= other.start && other.end <= end;
     }
 
     boolean overlap(Range other) {
-        if (contain(other)) return true;
-        return start <= other.start && other.start <= end;
+        return start <= other.end && other.start <= end;
     }
 }
