@@ -19,7 +19,6 @@ public class SupplyStacks {
         //Part Two
         System.out.println("getTopOfCrateStack9001: " + getTopOfCrateStack9001(path));
         // VRZGHDFBQ
-
     }
 
     public static String getTopOfCrateStack9000(String fileName) {
@@ -28,7 +27,7 @@ public class SupplyStacks {
         String regexStacksOfCrates = "\\[(\\w)\\]\\s?|(\\s{3})\\s?";
         Pattern patternOfStacksOfCrates = Pattern.compile(regexStacksOfCrates);
 
-        String regexRearrangementProcedure = "move \\d+ from \\d+ to \\d+";
+        String regexRearrangementProcedure = "^move (\\d+) from (\\d+) to (\\d+)$";
         Pattern patternOfRearrangementProcedure = Pattern.compile(regexRearrangementProcedure);
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName))) {
@@ -62,9 +61,8 @@ public class SupplyStacks {
                 //Reading-creating rearrangement procedure
                 Matcher matcherOfRearrangementProcedure = patternOfRearrangementProcedure.matcher(line);
                 if (matcherOfRearrangementProcedure.find()) {
-                    String[] command = line.split(" ");
-                    for (int i = 0; i < Integer.parseInt(command[1]); i++) {
-                        stacksOfCratesInReverseOrder.get(Integer.parseInt(command[5])).addFirst(stacksOfCratesInReverseOrder.get(Integer.parseInt(command[3])).pollFirst());
+                    for (int i = 0; i < Integer.parseInt(matcherOfRearrangementProcedure.group(1)); i++) {
+                        stacksOfCratesInReverseOrder.get(Integer.parseInt(matcherOfRearrangementProcedure.group(3))).addFirst(stacksOfCratesInReverseOrder.get(Integer.parseInt(matcherOfRearrangementProcedure.group(2))).pollFirst());
                     }
                 }
 
@@ -88,7 +86,7 @@ public class SupplyStacks {
         String regexStacksOfCrates = "\\[(\\w)\\]\\s?|(\\s{3})\\s?";
         Pattern patternOfStacksOfCrates = Pattern.compile(regexStacksOfCrates);
 
-        String regexRearrangementProcedure = "move \\d+ from \\d+ to \\d+";
+        String regexRearrangementProcedure = "^move (\\d+) from (\\d+) to (\\d+)$";
         Pattern patternOfRearrangementProcedure = Pattern.compile(regexRearrangementProcedure);
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName))) {
@@ -122,17 +120,16 @@ public class SupplyStacks {
                 //Reading-creating rearrangement procedure
                 Matcher matcherOfRearrangementProcedure = patternOfRearrangementProcedure.matcher(line);
                 if (matcherOfRearrangementProcedure.find()) {
-                    String[] command = line.split(" ");
-                    int amountOfCrates = Integer.parseInt(command[1]);
+                    int amountOfCrates = Integer.parseInt(matcherOfRearrangementProcedure.group(1));
                     if (amountOfCrates == 1) {
-                        stacksOfCratesInReverseOrder.get(Integer.parseInt(command[5])).addFirst(stacksOfCratesInReverseOrder.get(Integer.parseInt(command[3])).pollFirst());
+                        stacksOfCratesInReverseOrder.get(Integer.parseInt(matcherOfRearrangementProcedure.group(3))).addFirst(stacksOfCratesInReverseOrder.get(Integer.parseInt(matcherOfRearrangementProcedure.group(2))).pollFirst());
                     } else {
                         String[] crates = new String[amountOfCrates];
                         for (int i = 0; i < amountOfCrates; i++) {
-                            crates[i] = stacksOfCratesInReverseOrder.get(Integer.parseInt(command[3])).pollFirst();
+                            crates[i] = stacksOfCratesInReverseOrder.get(Integer.parseInt(matcherOfRearrangementProcedure.group(2))).pollFirst();
                         }
-                        for (int i = amountOfCrates-1; i >= 0; i--) {
-                            stacksOfCratesInReverseOrder.get(Integer.parseInt(command[5])).addFirst(crates[i]);
+                        for (int i = amountOfCrates - 1; i >= 0; i--) {
+                            stacksOfCratesInReverseOrder.get(Integer.parseInt(matcherOfRearrangementProcedure.group(3))).addFirst(crates[i]);
                         }
                     }
                 }
